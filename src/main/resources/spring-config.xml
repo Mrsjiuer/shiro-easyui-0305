@@ -1,0 +1,100 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <context:property-placeholder location="classpath:jdbc.properties" ignore-unresolvable="true"/>
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="${jdbc.driver}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="mapperLocations" value="classpath:com/test/ssm/dao/mapper/*.xml"/>
+        <property name="typeAliasesPackage" value="com.test.ssm.pojo"/>
+        <property name="plugins">
+            <array>
+                <bean class="com.github.pagehelper.PageHelper">
+                    <property name="properties">
+                        <value>
+                            dialect=mysql
+                            reasonable=true
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
+
+    </bean>
+    <!--批量扫描dao的接口-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.test.ssm.dao"/>
+    </bean>
+
+
+    <context:component-scan base-package="com.test.ssm.service">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service"/>
+    </context:component-scan>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <tx:method name="add*" rollback-for="Exception"/>
+            <tx:method name="delete*" rollback-for="Exception"/>
+            <tx:method name="update*" rollback-for="Exception"/>
+            <tx:method name="get*" propagation="SUPPORTS" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <aop:config>
+        <aop:pointcut id="point" expression="execution(* com.test.ssm.service..*(..))"/>
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="point"/>
+    </aop:config>
+    <bean id="cacheManager" class="org.apache.shiro.cache.MemoryConstrainedCacheManager" />
+    <bean id="myShiroRealm" class="com.test.ssm.shiro.MyShiroRealm"/>
+    <!--Shiro的登陆管理器-->
+    <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+        <property name="realm" ref="myShiroRealm"/>
+        <property name="cacheManager" ref="cacheManager"/>
+    </bean>
+    <!--会在项目启动的时候加载，在这个类中，加载了每个url对应的角色id-->
+    <bean id="shiroFilter" class="com.test.ssm.shiro.MyShiroFilterFactoryBean">
+        <property name="securityManager" ref="securityManager"/>
+        <!--登陆页面的地址-->
+        <property name="loginUrl" value="/login.html"/>
+        <!--登录成功的跳转地址-->
+        <property name="successUrl" value="/index.html"/>
+        <!--验证失败的跳转地址-->
+        <property name="unauthorizedUrl" value="/auth_error.html"/>
+        <!--静态的条件,登录不验证-->
+        <property name="filterChainDefinitions">
+            <!--anon是不认证，authc必须登陆认证-->
+            <value>
+                /login.html = anon
+                /dologin.html = anon
+            </value>
+        </property>
+        <property name="filters">
+            <map>
+                <!--角色-->
+                <entry key="roles">
+                    <bean class="com.test.ssm.shiro.MyShiroFilter"/>
+                </entry>
+            </map>
+        </property>
+
+    </bean>
+
+</beans>
