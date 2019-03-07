@@ -32,18 +32,18 @@
                 {field: 'realName', title: '真实姓名', width: 100},
                 {
                     field: 'status', title: '状态', width: 100, formatter: function (value, row) {
-                    if (value == 1) {
-                        return '<span style="color: #00ee00">有效</span>';
-                    } else {
-                        return '<span style="color: #ee1611">有效</span>';
+                        if (value == 1) {
+                            return '<span style="color: #00ee00">有效</span>';
+                        } else {
+                            return '<span style="color: #ee1611">有效</span>';
+                        }
                     }
-                }
                 },
-                { field:'ck',checkbox:true},
+                {field: 'ck', checkbox: true},
 
             ]],
-            checkOnSelect:false,
-            selectOnCheck:false
+            checkOnSelect: false,
+            selectOnCheck: false
         })
         //重置分页
 //        var pager = $('#game-table').datagrid().datagrid('getPager');
@@ -62,28 +62,28 @@
             width: 500,
             height: 400,
             closed: false,
-            href: 'adminuser.html?act=go_role&userId='+row.id,
+            href: 'adminuser.html?act=go_role&userId=' + row.id,
             modal: true,
-            onClose:function(){
+            onClose: function () {
                 $(div).dialog("destroy");//dialog在关闭的时候必须销毁
             },
             buttons: [{
                 iconCls: "icon-ok",
                 text: '保存',
                 handler: function () {
-                    var nodes = $('#user-role').tree('getChecked', ['checked','indeterminate']);
-                    var roleIds=new Array();
-                    $.each(nodes,function(i,obj){
+                    var nodes = $('#user-role').tree('getChecked', ['checked', 'indeterminate']);
+                    var roleIds = new Array();
+                    $.each(nodes, function (i, obj) {
                         roleIds.push(obj.id)
                     })
                     $.ajax({
                         url: 'adminuser.html?act=assign_role',
-                        data: "userId="+row.id+"&roleIds="+roleIds,
+                        data: "userId=" + row.id + "&roleIds=" + roleIds,
                         method: 'post',
                         success: function (json) {
-                            if(json.status){
+                            if (json.status) {
                                 $(div).dialog("destroy")
-                            }else{
+                            } else {
                                 alert(json.message)
                             }
                         }
@@ -97,20 +97,34 @@
             }]
         });
     }
-//    function searchAdminUser(){
-//        $("#role-table").datagrid({
-//            queryParams: {
-//                name: $("#role-name").textbox("getText"),
-//                status: $("#role-status").combobox("getValue")
-//            }
-//        })
-//    }
+
+    //    function searchAdminUser(){
+    //        $("#role-table").datagrid({
+    //            queryParams: {
+    //                name: $("#role-name").textbox("getText"),
+    //                status: $("#role-status").combobox("getValue")
+    //            }
+    //        })
+    //    }
     function deleteUser() {
-        var rows = $("#adminuser-table").datagrid("getChecked");
-        var ids=new Array();
-        $.each(rows,function(i,r){
-            ids.push(r.id);
-        })
-        alert(ids)
+        $.messager.confirm('Confirm', '确定要删除吗?', function (r) {
+            if (r) {
+                var rows = $("#adminuser-table").datagrid("getChecked");
+                var ids = new Array();
+                $.each(rows, function (i, r) {
+                    ids.push(r.id);
+                })
+                $.ajax({
+                    url: "adminuser.html?act=delete_admin",
+                    data: "ids=" + ids,
+                    method: 'post',
+                    success: function (json) {
+                        if (json.status) {
+                            $('#adminuser-table').datagrid("reload")
+                        }
+                    }
+                })
+            }
+        });
     }
 </script>

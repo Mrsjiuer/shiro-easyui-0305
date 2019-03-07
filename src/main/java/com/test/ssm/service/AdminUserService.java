@@ -13,4 +13,8 @@ public interface AdminUserService {
     void addUserRole(Integer userId, Integer[] roleIds);
 
     List<Integer> getUserRoleIds(Integer userId);
+
+    void deleteUserAdmin(Integer[] ids);
+
+    void deleteUserRole(Integer roleId);
 }

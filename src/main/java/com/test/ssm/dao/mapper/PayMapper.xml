@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+    <mapper namespace="com.test.ssm.dao.PayDAO">
+        <select id="getAllPay" parameterType="PayChannel" resultType="PayChannel">
+            SELECT id,NAME,ALIAS,status ,created_date createdDate ,TYPE
+            FROM pay_channel
+            <where>
+                <if test="_parameter!=null and _parameter!=''">name like concat('%',#{_parameter},'%')</if>
+            </where>
+        </select>
+        <select id="getPayById" resultType="PayChannel" parameterType="int">
+            SELECT id,NAME,ALIAS,status ,created_date createdDate,TYPE FROM pay_channel
+            where ID=#{id}
+        </select>
+    <insert id="addPay" parameterType="PayChannel">
+        insert into pay_channel(id,NAME,ALIAS,status,created_date,TYPE)
+        values(#{name},#{alias},#{status},#{createdDate},#{type})
+    </insert>
+    <update id="updatePay" parameterType="PayChannel">
+        update pay_channel
+        <set>
+            <if test="name!=null and name!=''">name=#{name},</if>
+            <if test="alias!=null and alias!=''">alias=#{alias},</if>
+            <if test="status!=null">status=#{status},</if>
+            <if test="createdDate!=null">created_date=#{createdDate},</if>
+            <if test="type!=null">type=#{type}</if>
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="deletePayChannel" parameterType="int">
+        delete from pay_channel where ID=#{id}
+    </delete>
+</mapper>

@@ -62,4 +62,15 @@ public class AdminUserController {
         }
          return new AjaxMessage(false,"分配失败");
     }
+    @RequestMapping(params = "act=delete_admin")
+    @ResponseBody
+    public AjaxMessage delete(Integer[] ids) {
+        try {
+            adminUserService.deleteUserAdmin(ids);
+            return new AjaxMessage(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new AjaxMessage(true, "删除失败");
+        }
+    }
 }

@@ -3,7 +3,7 @@
 <mapper namespace="com.test.ssm.dao.RoleDAO">
 
     <select id="getRoleList" parameterType="Role" resultType="Role">
-        select ID,NAME,STATUS,REMARK from ROLE
+        select ID,NAME,STATUS,REMARK from ROLES
         <where>
             <if test="name!=null and name!=''">NAME=#{name}</if>
             <if test="status!=null">and STATUS=#{status}</if>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+    <mapper namespace="com.test.ssm.dao.CpDAO">
+        <select id="getAllCp" parameterType="Cp" resultType="Cp">
+            SELECT id,NAME,SECRET_KEY secretKey,notice_key noticeKey,password,status ,created_date createdDate FROM cp
+            <where>
+                <if test="_parameter!=null and _parameter!=''">name like concat('%',#{_parameter},'%')</if>
+            </where>
+        </select>
+        <select id="getCpById" resultType="Cp" parameterType="int">
+            SELECT id,NAME,SECRET_KEY secretKey,notice_key noticeKey,password,status ,created_date createdDate FROM cp
+            where ID=#{id}
+        </select>
+    <insert id="addCp" parameterType="Cp">
+        insert into cp(NAME,SECRET_KEY,notice_key ,password,status ,created_date)
+        values(#{name},#{secretKey},#{noticeKey},#{password},#{status},#{createdDate})
+    </insert>
+    <update id="updateCp" parameterType="Cp">
+        update cp
+        <set>
+            <if test="name!=null and name!=''">name=#{name},</if>
+            <if test="secretKey!=null and secretKey!=''">secret_key=#{secretKey},</if>
+            <if test="noticeKey!=null and noticeKey!=''">notice_key=#{noticeKey},</if>
+            <if test="password!=null and password!=''">password=#{password},</if>
+            <if test="status!=null">status=#{status},</if>
+            <if test="createdDate!=null">created_date=#{createdDate}</if>
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="deleteCp" parameterType="int">
+        delete from cp where ID=#{id}
+    </delete>
+</mapper>

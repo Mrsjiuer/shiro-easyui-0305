@@ -31,6 +31,19 @@ public class AdminUserServiceImpl implements AdminUserService {
 //        return null;
 //    }
 
+
+    @Override
+    public void deleteUserAdmin(Integer[] ids) {
+        for (Integer id : ids) {
+            adminUserDAO.deleteUserAdmin(id);
+        }
+    }
+
+    @Override
+    public void deleteUserRole(Integer roleId) {
+adminUserDAO.deleteUserRole(roleId);
+    }
+
     @Override
     public PageInfo<AdminUser> getUserList(AdminUser user, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum,pageSize);
@@ -41,7 +54,7 @@ public class AdminUserServiceImpl implements AdminUserService {
     public void addUserRole(Integer userId, Integer[] roleIds) {
         adminUserDAO.deleteUserRole(userId);
         for (Integer roleId : roleIds) {
-            adminUserDAO.addUserRole(roleId,userId);
+            adminUserDAO.addUserRole(userId,roleId);
         }
     }
 

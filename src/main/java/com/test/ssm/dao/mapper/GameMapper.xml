@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+    <mapper namespace="com.test.ssm.dao.GameDAOInterfase">
+    <resultMap id="GameMap" type="Game">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="status" column="status"/>
+        <result property="downloadUrl" column="download_url"/>
+        <result property="createdDate" column="created_date"/>
+    </resultMap>
+        <select id="getAllGame" parameterType="Game" resultMap="GameMap">
+            SELECT id,NAME,STATUS,download_url,created_date FROM game
+            <where>
+                <if test="name!=null and name!=''">name like concat('%',#{name},'%')</if>
+            </where>
+        </select>
+        <select id="getGameById" resultMap="GameMap" parameterType="int">
+            SELECT id,NAME,STATUS,download_url,created_date FROM game
+            where ID=#{id}
+        </select>
+    <insert id="addGame" parameterType="Game">
+        insert into game(NAME,STATUS,download_url,created_date) values(#{name},#{status},#{downloadUrl},#{createdDate})
+    </insert>
+    <update id="updateGame" parameterType="Game">
+        update game
+        <set>
+            <if test="name!=null and name!=''">name=#{name},</if>
+            <if test="status!=null">status=#{status},</if>
+            <if test="downloadUrl!=null and downloadUrl!=''">download_url=#{downloadUrl},</if>
+            <if test="createdDate!=null">created_date=#{createdDate}</if>
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="deleteGame" parameterType="int">
+        delete from game where ID=#{id}
+    </delete>
+</mapper>

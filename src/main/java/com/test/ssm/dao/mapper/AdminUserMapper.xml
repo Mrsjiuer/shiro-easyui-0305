@@ -42,5 +42,8 @@
     <select id="getUserRoleIds" parameterType="int" resultType="int">
         select ROLE_ID from USER_ROLE where  USER_ID=#{userId}
     </select>
+    <delete id="deleteUserAdmin" parameterType="int">
+        delete from admin_user where ID=#{id}
+    </delete>
 </mapper>
     

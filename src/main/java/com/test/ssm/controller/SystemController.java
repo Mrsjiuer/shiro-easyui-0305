@@ -52,7 +52,9 @@ public class SystemController {
 //        if (user == null) {
 //            return new ModelAndView("login", "message", "用户名或密码错误");
 //        }
-//        session.setAttribute(AdminConstants.SESSION_USER, user);
+//         session.setAttribute("subject", subject);
+//        int id = Integer.parseInt(subject.getPrincipal().toString());
+
         return new ModelAndView(new RedirectView("index.html"));
     }
 
