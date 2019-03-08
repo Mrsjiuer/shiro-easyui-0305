@@ -17,4 +17,6 @@ public interface AdminUserService {
     void deleteUserAdmin(Integer[] ids);
 
     void deleteUserRole(Integer roleId);
+
+    AdminUser getUserById(Integer id);
 }

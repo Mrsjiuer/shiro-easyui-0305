@@ -4,7 +4,6 @@ import com.test.ssm.dao.MenuDAO;
 import com.test.ssm.pojo.Menu;
 import com.test.ssm.service.MenuService;
 import com.test.ssm.shiro.MyShiroFilterFactoryBean;
-import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

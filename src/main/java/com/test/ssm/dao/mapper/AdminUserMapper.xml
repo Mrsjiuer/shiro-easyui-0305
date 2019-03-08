@@ -29,6 +29,16 @@
         FROM ADMIN_USER
         where EMAIL=#{email}
     </select>
+    <select id="getUserById" parameterType="int" resultMap="userMap">
+        SELECT
+               ID,
+               PASSWORD,
+               EMAIL,
+               REAL_NAME,
+               STATUS
+        FROM ADMIN_USER
+        where id=#{id}
+    </select>
 
 
     <insert id="addUserRole">

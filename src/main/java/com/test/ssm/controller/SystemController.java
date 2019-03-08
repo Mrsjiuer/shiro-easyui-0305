@@ -53,7 +53,10 @@ public class SystemController {
 //            return new ModelAndView("login", "message", "用户名或密码错误");
 //        }
 //         session.setAttribute("subject", subject);
-//        int id = Integer.parseInt(subject.getPrincipal().toString());
+        int id = Integer.parseInt(subject.getPrincipal().toString());
+
+        AdminUser adminUser = adminUserService.getUserById(id);
+        session.setAttribute("adminUser",adminUser);
 
         return new ModelAndView(new RedirectView("index.html"));
     }
