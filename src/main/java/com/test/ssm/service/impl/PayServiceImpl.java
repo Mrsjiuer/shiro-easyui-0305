@@ -15,16 +15,10 @@ public class PayServiceImpl implements PayService {
     private PayDAO payDAO;
 
     @Override
-    public PageInfo<PayChannel> getAllPayPage(String name, Integer pageNum, Integer pageSize) {
+    public PageInfo<PayChannel> getAllPayPage(PayChannel payChannel, Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum, pageSize);
-        return new PageInfo<PayChannel>(payDAO.getAllPay(name));
+        return new PageInfo<>(payDAO.getAllPay(payChannel));
     }
-
-    @Override
-    public List<PayChannel> getAllPay(String name) {
-        return payDAO.getAllPay(name);
-    }
-
     @Override
     public PayChannel getPayById(Integer id) {
         return payDAO.getPayById(id);

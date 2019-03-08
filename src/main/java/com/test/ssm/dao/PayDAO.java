@@ -7,7 +7,8 @@ import java.util.List;
 
 @Repository
 public interface PayDAO {
-    List<PayChannel> getAllPay(String name);
+
+    List<PayChannel> getAllPay(PayChannel payChannel);
     PayChannel getPayById(Integer id);
     void updatePay(PayChannel payChannel);
 }

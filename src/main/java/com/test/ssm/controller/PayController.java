@@ -1,6 +1,8 @@
 package com.test.ssm.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.test.ssm.pojo.Role;
+import com.test.ssm.util.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,10 +42,15 @@ public class PayController {
     }
 
     @RequestMapping("tablePay.html")
+//    @ResponseBody
+//    public TableData table(PayChannel payChannel, Integer page, Integer rows) {
+//        PageInfo<PayChannel> pageInfo = payService.getAllPayPage(payChannel, page, rows);
+//        return new TableData(pageInfo.getTotal(), pageInfo.getList());
+//    }
     @ResponseBody
-    public Map<String, Object> payChannel(String name, Integer page, Integer rows) {
-        Map<String, Object> result = new HashMap<String,Object>();
-        PageInfo<PayChannel> pageInfo = payService.getAllPayPage(name, page, rows);
+    public Map<String, Object> payChannel(PayChannel payChannel,Integer page, Integer rows) {
+        Map<String, Object> result = new HashMap<>();
+        PageInfo<PayChannel> pageInfo = payService.getAllPayPage(payChannel, page, rows);
         result.put("total", pageInfo.getTotal());//一共多少条
         result.put("rows", pageInfo.getList());
         return result;

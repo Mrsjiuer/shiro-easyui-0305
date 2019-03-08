@@ -4,7 +4,6 @@ import com.test.ssm.pojo.AdminUser;
 import com.test.ssm.pojo.Menu;
 import com.test.ssm.service.AdminUserService;
 import com.test.ssm.service.MenuService;
-import com.test.ssm.util.AdminConstants;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -48,11 +47,6 @@ public class SystemController {
             return new ModelAndView("login", "message", "用户名或密码错误");
         }
         System.out.println("成功=================");
-        //AdminUser user = adminUserService.doLogin(email, password);
-//        if (user == null) {
-//            return new ModelAndView("login", "message", "用户名或密码错误");
-//        }
-//         session.setAttribute("subject", subject);
         int id = Integer.parseInt(subject.getPrincipal().toString());
 
         AdminUser adminUser = adminUserService.getUserById(id);
@@ -72,8 +66,7 @@ public class SystemController {
 
     @RequestMapping("side.html")
     @ResponseBody
-    public List<Menu> getMenuTree(HttpSession session) {
-       // AdminUser user = (AdminUser) session.getAttribute(AdminConstants.SESSION_USER);
+    public List<Menu> getMenuTree() {
         Subject subject=SecurityUtils.getSubject();
         return menuService.getUserMenu(Integer.parseInt(subject.getPrincipal().toString()));
     }

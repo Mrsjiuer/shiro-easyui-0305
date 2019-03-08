@@ -6,8 +6,7 @@ import com.test.ssm.pojo.PayChannel;
 import java.util.List;
 
 public interface PayService {
-    PageInfo<PayChannel> getAllPayPage(String name, Integer pageNum, Integer pageSize);
-    List<PayChannel> getAllPay(String name);
+    PageInfo<PayChannel> getAllPayPage(PayChannel payChannel,Integer pageNum, Integer pageSize);
     PayChannel getPayById(Integer id);
     void updatePay(PayChannel payChannel);
 }
