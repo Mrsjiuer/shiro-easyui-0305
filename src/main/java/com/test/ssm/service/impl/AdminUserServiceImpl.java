@@ -59,10 +59,19 @@ adminUserDAO.deleteUserRole(roleId);
     }
 
     @Override
+    public void addAdmin(AdminUser adminUser) {
+        adminUserDAO.addAdmin(adminUser);
+    }
+
+    @Override
     public List<Integer> getUserRoleIds(Integer userId) {
         return adminUserDAO.getUserRoleIds(userId);
     }
 
+    @Override
+    public void updateUserAdmin(AdminUser adminUser) {
+        adminUserDAO.updateUserAdmin(adminUser);
+    }
 
     @Override
     public AdminUser getUserById(Integer id) {

@@ -5,55 +5,68 @@
     <resultMap id="userMap" type="AdminUser">
         <id property="id" column="ID"/>
         <result property="status" column="STATUS"/>
+        <result property="isAdmin" column="is_admin"/>
         <result property="realName" column="REAL_NAME"/>
         <result property="email" column="EMAIL"/>
         <result property="password" column="PASSWORD"/>
+        <result property="limitedDate" column="limited_date"/>
     </resultMap>
 
     <select id="getUserList" parameterType="AdminUser" resultMap="userMap">
-        SELECT
-            ID,
-            EMAIL,
-            REAL_NAME,
-            STATUS
+        SELECT ID, EMAIL, REAL_NAME, STATUS,IS_ADMIN,LIMITED_DATE
         FROM ADMIN_USER
+        <where>
+            <if test="realName!=null and realName!=''">real_name=#{realName}</if>
+            <if test="status!=null"> and status=#{status}</if>
+        </where>
     </select>
 
     <select id="getUserByEmail" parameterType="String" resultMap="userMap">
-        SELECT
-            ID,
-            PASSWORD,
-            EMAIL,
-            REAL_NAME,
-            STATUS
+        SELECT ID, PASSWORD, EMAIL, REAL_NAME
         FROM ADMIN_USER
-        where EMAIL=#{email}
+        where EMAIL = #{email}
     </select>
     <select id="getUserById" parameterType="int" resultMap="userMap">
-        SELECT
-               ID,
-               PASSWORD,
-               EMAIL,
-               REAL_NAME,
-               STATUS
+        SELECT ID, PASSWORD, EMAIL, REAL_NAME, STATUS, IS_ADMIN, LIMITED_DATE
         FROM ADMIN_USER
-        where id=#{id}
+        where id = #{id}
     </select>
-
-
     <insert id="addUserRole">
-        insert into USER_ROLE(ROLE_ID,USER_ID)values(#{roleId},#{userId})
+        insert into USER_ROLE (ROLE_ID, USER_ID)
+        values (#{roleId}, #{userId})
+    </insert>
+    <insert id="addAdmin" parameterType="AdminUser">
+        insert into admin_user(PASSWORD, EMAIL, REAL_NAME, STATUS, IS_ADMIN, LIMITED_DATE)
+        values (#{password},#{email},#{realName},#{status},#{isAdmin},#{limitedDate})
     </insert>
 
+    <update id="updateUserAdmin" parameterType="AdminUser">
+        update admin_user
+        <set>
+            <if test="password!=null and password!=''">password=#{password},</if>
+            <if test="email!=null and email!=''">email=#{email},</if>
+            <if test="realName!=null and realName!=''">real_name=#{realName},</if>
+            <if test="isAdmin!=null">is_admin=#{isAdmin},</if>
+            <if test="status!=null">status=#{status},</if>
+            <if test="limitedDate!=null">limited_date=#{limitedDate}</if>
+        </set>
+        where id=#{id}
+    </update>
     <delete id="deleteUserRole" parameterType="int">
-        delete from USER_ROLE where USER_ID=#{userId}
+        delete
+        from USER_ROLE
+        where USER_ID = #{userId}
     </delete>
 
     <select id="getUserRoleIds" parameterType="int" resultType="int">
-        select ROLE_ID from USER_ROLE where  USER_ID=#{userId}
+        select ROLE_ID
+        from USER_ROLE
+        where USER_ID = #{userId}
     </select>
     <delete id="deleteUserAdmin" parameterType="int">
-        delete from admin_user where ID=#{id}
+        delete
+        from admin_user
+        where ID = #{id}
     </delete>
 </mapper>
     

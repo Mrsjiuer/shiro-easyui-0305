@@ -15,7 +15,7 @@
 <%--easyui中，给元素加class，就会把元素变成一个控件，easyui-控件名--%>
 <%--所有控件属性，写在data-options中，大多属性可以直接写成标签的属性--%>
 <div data-options="region:'north'" style="height:100px;">
-    欢迎您：${sessionScope.adminUser.realName}<a href="logout.html">退出</a>
+    欢迎您：${sessionScope.name}<a href="logout.html">退出</a>
 </div>
 <div data-options="region:'west'" title="菜单" style="width:200px;">
     <ul id="ul-tree">

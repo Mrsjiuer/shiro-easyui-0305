@@ -2,6 +2,7 @@ package com.test.ssm.controller;
 
 import com.github.pagehelper.PageInfo;
 import com.test.ssm.pojo.AdminUser;
+import com.test.ssm.pojo.PayChannel;
 import com.test.ssm.pojo.Role;
 import com.test.ssm.service.AdminUserService;
 import com.test.ssm.service.RoleService;
@@ -9,9 +10,11 @@ import com.test.ssm.util.AjaxMessage;
 import com.test.ssm.util.TableData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
@@ -62,15 +65,51 @@ public class AdminUserController {
         }
          return new AjaxMessage(false,"分配失败");
     }
+
+    @RequestMapping(params = "act=go_admin")
+    public String goUpdate(Integer id, HttpServletRequest request) {
+        System.out.println(id);
+        if(id!=null){
+            AdminUser adminUser = adminUserService.getUserById(id);
+            request.setAttribute("adminUser", adminUser);
+        }
+        return "updateAdmin";
+    }
+    @RequestMapping(params = "act=update_admin")
+    @ResponseBody
+    public AjaxMessage update(AdminUser adminUser){
+        try {
+            if(adminUser.getId()==null){
+                adminUserService.addAdmin(adminUser);
+            }
+                adminUserService.updateUserAdmin(adminUser);
+            return new AjaxMessage(true,"修改成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new AjaxMessage(false, "修改失败");
+        }
+    }
+//    @RequestMapping(params = "act=add_admin")
+//    @ResponseBody
+//    public AjaxMessage addUser(AdminUser adminUser){
+//        try {
+//            adminUserService.addAdmin(adminUser);
+//            return new AjaxMessage(true,"添加成功");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return new AjaxMessage(false, "添加失败");
+//        }
+//    }
+
     @RequestMapping(params = "act=delete_admin")
     @ResponseBody
     public AjaxMessage delete(Integer[] ids) {
         try {
             adminUserService.deleteUserAdmin(ids);
-            return new AjaxMessage(true);
+            return new AjaxMessage(true,"删除成功");
         } catch (Exception e) {
             e.printStackTrace();
-            return new AjaxMessage(true, "删除失败");
+            return new AjaxMessage(false, "删除失败");
         }
     }
 }

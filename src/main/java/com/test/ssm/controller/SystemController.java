@@ -30,6 +30,7 @@ public class SystemController {
     public String login() {
         return "login";
     }
+
     @RequestMapping("logout.html")
     public String logout(HttpSession session) {
         session.invalidate();
@@ -38,8 +39,9 @@ public class SystemController {
 
     @RequestMapping("dologin.html")
     public ModelAndView login(String email, String password, HttpSession session) {
-        Subject subject= SecurityUtils.getSubject();
-        UsernamePasswordToken token=new UsernamePasswordToken(email,password);
+        //权限管理通过subjec存取登陆的用户名和密码
+        Subject subject = SecurityUtils.getSubject();
+        UsernamePasswordToken token = new UsernamePasswordToken(email, password);
         try {
             subject.login(token);
         } catch (AuthenticationException e) {
@@ -48,10 +50,9 @@ public class SystemController {
         }
         System.out.println("成功=================");
         int id = Integer.parseInt(subject.getPrincipal().toString());
-
+        //前台获取session中的信息
         AdminUser adminUser = adminUserService.getUserById(id);
-        session.setAttribute("adminUser",adminUser);
-
+        session.setAttribute("name", adminUser.getRealName());
         return new ModelAndView(new RedirectView("index.html"));
     }
 
@@ -59,6 +60,7 @@ public class SystemController {
     public String index() {
         return "index";
     }
+
     @RequestMapping("auth_error.html")
     public String error() {
         return "error";
@@ -67,7 +69,7 @@ public class SystemController {
     @RequestMapping("side.html")
     @ResponseBody
     public List<Menu> getMenuTree() {
-        Subject subject=SecurityUtils.getSubject();
+        Subject subject = SecurityUtils.getSubject();
         return menuService.getUserMenu(Integer.parseInt(subject.getPrincipal().toString()));
     }
 }

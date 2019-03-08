@@ -14,6 +14,9 @@ public interface AdminUserDAO {
 
     void deleteUserRole(Integer roleId);
 
+    void updateUserAdmin(AdminUser adminUser);
+    void addAdmin(AdminUser adminUser);
+
     List<Integer> getUserRoleIds(Integer userId);
 
     void deleteUserAdmin(Integer id);
